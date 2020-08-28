@@ -32,22 +32,31 @@ function! s:format_item(item) abort
                 \ . ':' . substitute(a:item.text, '\v^\s*', ' ', '')
 endfunction
 
-function! s:quickfix_sink(err) abort
-    let l:match = matchlist(a:err, '\v^([^:]*)\:(\d+)?%(\scol\s(\d+))?.*\:')[1:3]
-    if empty(l:match) || empty(l:match[0])
+function! s:quickfix_sink(actions, lines) abort
+    if len(a:lines) < 2
         return
     endif
 
-    if empty(l:match[1]) && (bufnr(l:match[0]) == bufnr('%'))
-        return
-    endif
+    let l:key = remove(a:lines, 0)
+    let l:cmd = get(a:actions, l:key, 'e')
 
-    let l:lnum = empty(l:match[1]) ? 1 : str2nr(l:match[1])
-    let l:col = empty(l:match[2]) ? 1 : str2nr(l:match[2])
+    for line in a:lines
+        let l:match = matchlist(line, '\v^([^:]*)\:(\d+)?%(\scol\s(\d+))?.*\:')[1:3]
+        if empty(l:match) || empty(l:match[0])
+            continue
+        endif
 
-    execute 'buffer' bufnr(l:match[0])
-    call cursor(l:lnum, l:col)
-    normal! zvzz
+        if empty(l:match[1]) && (bufnr(l:match[0]) == bufnr('%'))
+            continue
+        endif
+
+        let l:lnum = empty(l:match[1]) ? 1 : str2nr(l:match[1])
+        let l:col = empty(l:match[2]) ? 1 : str2nr(l:match[2])
+
+        execute l:cmd fnameescape(l:match[0])
+        call cursor(l:lnum, l:col)
+        normal! zvzz
+    endfor
 endfunction
 
 function! s:syntax() abort
@@ -64,11 +73,17 @@ function! s:syntax() abort
 endfunction
 
 function! fzf_quickfix#run(...) abort
-    call fzf#run(fzf#wrap({
-                \ 'source': map(a:1 ? getloclist(0) : getqflist(), 's:format_item(v:val)'),
-                \ 'sink': function('s:quickfix_sink'),
-                \ 'options': printf('--prompt="%s> "', (a:1 ? 'Loc' : 'Qf'))
-                \ }))
+    let opts = {
+        \ 'source': map(a:1 ? getloclist(0) : getqflist(), 's:format_item(v:val)'),
+        \ 'options': ['--multi', '--prompt', a:1 ? 'Loc>' : 'Qf>']
+        \ }
+    let opts = fzf#wrap('quickfix', opts)
+    function! opts.sink(lines) dict
+        return s:quickfix_sink(self._action, a:lines)
+    endfunction
+    let opts['sink*'] = remove(opts, 'sink')
+    call fzf#run(opts)
+
     call s:syntax()
 endfunction
 
