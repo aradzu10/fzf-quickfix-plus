@@ -51,7 +51,7 @@ function! s:quickfix_sink(err) abort
 endfunction
 
 function! s:syntax() abort
-  if has('syntax') && exists('g:syntax_on')
+  if has('syntax') && g:fzf_quickfix_syntax_on
     syntax match fzfQfFileName '^[^:]*' nextgroup=fzfQfSeparator
     syntax match fzfQfSeparator ':' nextgroup=fzfQfLineNr contained
     syntax match fzfQfLineNr '[^:]*' contained contains=fzfQfError
@@ -69,9 +69,6 @@ function! fzf_quickfix#run(...) abort
         \ 'sink': function('s:quickfix_sink'),
         \ 'options': printf('--prompt="%s> "', (a:1 ? 'LocList' : 'QfList'))
         \ }))
-
-  if g:fzf_quickfix_syntax_on
-    call s:syntax()
-  endif
+  call s:syntax()
 endfunction
 
