@@ -4,9 +4,6 @@ scriptencoding utf-8
 " Use of this source code is governed by an MIT license that can be
 " found in the LICENSE file.
 
-let s:keep_cpo = &cpoptions
-set cpoptions&vim
-
 function! s:error_type(type, nr) abort
   if a:type ==? 'W'
     let l:msg = ' warning'
@@ -78,7 +75,3 @@ function! fzf_quickfix#run(...) abort
   endif
 endfunction
 
-let &cpoptions = s:keep_cpo
-unlet s:keep_cpo
-
-" vim: et sw=2 ts=2
