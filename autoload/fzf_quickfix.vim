@@ -8,7 +8,7 @@ let s:keep_cpo = &cpoptions
 set cpoptions&vim
 
 
-function! s:error_type(type, nr) abort
+function! s:fzf_quickfix#error_type(type, nr) abort
     if a:type ==? 'W'
         let l:msg = ' warning'
     elseif a:type ==? 'I'
@@ -28,15 +28,15 @@ function! s:error_type(type, nr) abort
     return printf('%s %3d', l:msg, a:nr)
 endfunction
 
-function! s:format_item(item) abort
+function! s:fzf_quickfix#format_item(item) abort
     return (a:item.bufnr ? bufname(a:item.bufnr) : '')
                 \ . ':' . (a:item.lnum  ? a:item.lnum : '')
                 \ . (a:item.col ? ' col ' . a:item.col : '')
-                \ . s:error_type(a:item.type, a:item.nr)
+                \ . s:fzf_quickfix#error_type(a:item.type, a:item.nr)
                 \ . ':' . substitute(a:item.text, '\v^\s*', ' ', '')
 endfunction
 
-function! s:quickfix_sink(actions, lines) abort
+function! s:fzf_quickfix#sink(actions, lines) abort
     if len(a:lines) < 2
         return
     endif
@@ -63,7 +63,7 @@ function! s:quickfix_sink(actions, lines) abort
     endfor
 endfunction
 
-function! s:syntax() abort
+function! s:fzf_quickfix#syntax() abort
     if has('syntax') && g:fzf_quickfix_syntax_on
         syntax match fzfQfFileName '^[^:]*' nextgroup=fzfQfSeparator
         syntax match fzfQfSeparator ':' nextgroup=fzfQfLineNr contained
@@ -78,17 +78,17 @@ endfunction
 
 function! fzf_quickfix#run(...) abort
     let opts = {
-        \ 'source': map(a:1 ? getloclist(0) : getqflist(), 's:format_item(v:val)'),
+        \ 'source': map(a:1 ? getloclist(0) : getqflist(), 's:fzf_quickfix#format_item(v:val)'),
         \ 'options': ['--multi', '--prompt', a:1 ? 'Loc>' : 'Qf>']
         \ }
     let opts = fzf#wrap('quickfix', opts)
     function! opts.sink(lines) dict
-        return s:quickfix_sink(self._action, a:lines)
+        return s:fzf_quickfix#sink(self._action, a:lines)
     endfunction
     let opts['sink*'] = remove(opts, 'sink')
     call fzf#run(opts)
 
-    call s:syntax()
+    call s:fzf_quickfix#syntax()
 endfunction
 
 
