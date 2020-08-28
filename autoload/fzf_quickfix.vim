@@ -26,14 +26,14 @@ endfunction
 
 function! s:format_item(item) abort
   return (a:item.bufnr ? bufname(a:item.bufnr) : '')
-        \ . '|' . (a:item.lnum  ? a:item.lnum : '')
+        \ . ':' . (a:item.lnum  ? a:item.lnum : '')
         \ . (a:item.col ? ' col ' . a:item.col : '')
         \ . s:error_type(a:item.type, a:item.nr)
-        \ . '|' . substitute(a:item.text, '\v^\s*', ' ', '')
+        \ . ':' . substitute(a:item.text, '\v^\s*', ' ', '')
 endfunction
 
 function! s:quickfix_sink(err) abort
-  let l:match = matchlist(a:err, '\v^([^|]*)\|(\d+)?%(\scol\s(\d+))?.*\|')[1:3]
+  let l:match = matchlist(a:err, '\v^([^:]*)\:(\d+)?%(\scol\s(\d+))?.*\:')[1:3]
   if empty(l:match) || empty(l:match[0])
     return
   endif
@@ -52,9 +52,9 @@ endfunction
 
 function! s:syntax() abort
   if has('syntax') && exists('g:syntax_on')
-    syntax match fzfQfFileName '^[^|]*' nextgroup=fzfQfSeparator
-    syntax match fzfQfSeparator '|' nextgroup=fzfQfLineNr contained
-    syntax match fzfQfLineNr '[^|]*' contained contains=fzfQfError
+    syntax match fzfQfFileName '^[^:]*' nextgroup=fzfQfSeparator
+    syntax match fzfQfSeparator ':' nextgroup=fzfQfLineNr contained
+    syntax match fzfQfLineNr '[^:]*' contained contains=fzfQfError
     syntax match fzfQfError 'error' contained
 
     highlight default link fzfQfFileName Directory
