@@ -1,6 +1,6 @@
 *fzf_quickfix.txt*
 
-Author: Filip Szymański <fszymanski.pl@gmail.com>
+Author: Arad Zulti <aradzulti@gmail.com>
 
 ==============================================================================
 CONTENTS                                               *fzf-quickfix-contents*
@@ -47,7 +47,7 @@ BUGS                                                       *fzf-quickfix-bugs*
 
 If you find a bug please create an issue on GitHub.
 
-https://github.com/fszymanski/fzf-quickfix/issues
+https://github.com/aradzu10/fzf-quickfix-plus/issues
 
 ==============================================================================
 CONTRIBUTING                                       *fzf-quickfix-contributing*
@@ -55,7 +55,7 @@ CONTRIBUTING                                       *fzf-quickfix-contributing*
 Think you can make this plugin better? Awesome. Fork it on GitHub and create
 a pull request.
 
-https://github.com/fszymanski/fzf-quickfix
+https://github.com/aradzu10/fzf-quickfix-plus
 
 ==============================================================================
 

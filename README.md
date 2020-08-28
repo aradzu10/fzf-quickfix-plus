@@ -11,13 +11,13 @@ Using the (Neo)vim built-in (kind of) plugin manager:
 
 ```sh
 $ cd path/to/pack/foo/start
-$ git clone https://github.com/fszymanski/fzf-quickfix.git
+$ git clone https://github.com/aradzu10/fzf-quickfix-plus.git
 ```
 
 Using your favorite (Neo)vim plugin manager:
 
 ```vim
-Plug 'fszymanski/fzf-quickfix', {'on': 'Quickfix'}
+Plug 'aradzu10/fzf-quickfix-plus', {'on': 'Quickfix'}
 
 nnoremap <Leader>q :Quickfix<CR>
 nnoremap <Leader>l :Quickfix!<CR>
