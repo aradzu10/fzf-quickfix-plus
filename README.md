@@ -1,5 +1,11 @@
 # fzf :heart: quickfix
 
+FZF-Quickfix-plus is a plugin design to quickly navigate quickfix and location list window.
+It provide the default functionality of FZF search:
+- Open multiple results.
+- Open in new tab, split and vsplit.
+
+
 ![](https://user-images.githubusercontent.com/25827968/63228948-0d8ff100-c1fb-11e9-95d8-e5df195ba18e.png)
 
 ## Requirements

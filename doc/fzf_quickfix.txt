@@ -15,9 +15,9 @@ CONTENTS                                               *fzf-quickfix-contents*
 ==============================================================================
 INTRODUCTION                                       *fzf-quickfix-introduction*
 
-A plugin design to quickly navigate quickfix and location list windows.
+A plugin design to quickly navigate quickfix and location list window.
 It provide the default functionality of FZF search:
-- multi select results.
+- Open multiple results.
 - Open in new tab, split and vsplit.
 
 ==============================================================================
