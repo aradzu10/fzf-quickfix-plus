@@ -24,7 +24,7 @@ function! s:error_type(type, nr) abort
   return printf('%s %3d', l:msg, a:nr)
 endfunction
 
-function! s:format_error(item) abort
+function! s:format_item(item) abort
   return (a:item.bufnr ? bufname(a:item.bufnr) : '')
         \ . '|' . (a:item.lnum  ? a:item.lnum : '')
         \ . (a:item.col ? ' col ' . a:item.col : '')
@@ -32,7 +32,7 @@ function! s:format_error(item) abort
         \ . '|' . substitute(a:item.text, '\v^\s*', ' ', '')
 endfunction
 
-function! s:error_handler(err) abort
+function! s:quickfix_sink(err) abort
   let l:match = matchlist(a:err, '\v^([^|]*)\|(\d+)?%(\scol\s(\d+))?.*\|')[1:3]
   if empty(l:match) || empty(l:match[0])
     return
@@ -65,8 +65,8 @@ endfunction
 
 function! fzf_quickfix#run(...) abort
   call fzf#run(fzf#wrap({
-        \ 'source': map(a:1 ? getloclist(0) : getqflist(), 's:format_error(v:val)'),
-        \ 'sink': function('s:error_handler'),
+        \ 'source': map(a:1 ? getloclist(0) : getqflist(), 's:format_item(v:val)'),
+        \ 'sink': function('s:quickfix_sink'),
         \ 'options': printf('--prompt="%s> "', (a:1 ? 'LocList' : 'QfList'))
         \ }))
 
